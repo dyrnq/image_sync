@@ -34,5 +34,8 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
+        run: |          
+          for tag in $(curl -fsSL https://k8s.gcr.io/v2/ingress-nginx/controller/tags/list | jq -r '.tags[]' ); do
+            docker run --rm --env DOCKER_USERNAME=${DOCKER_USERNAME} --env DOCKER_PASSWORD=${DOCKER_PASSWORD} dyrnq/skopeo:1.4.1 bash -c "skopeo --insecure-policy copy --all --dest-creds \$DOCKER_USERNAME:\$DOCKER_PASSWORD docker://k8s.gcr.io/ingress-nginx/controller:$tag docker://docker.io/dyrnq/ingress-nginx-controller:$tag"
+          done
           docker run --rm --env DOCKER_USERNAME=${DOCKER_USERNAME} --env DOCKER_PASSWORD=${DOCKER_PASSWORD} -v $(pwd)/sync.yaml:/opt/sync.yaml dyrnq/skopeo:1.4.1 bash -c "skopeo --insecure-policy sync --src yaml --all --dest-creds \$DOCKER_USERNAME:\$DOCKER_PASSWORD --dest docker /opt/sync.yaml docker.io/dyrnq"
