@@ -35,4 +35,4 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          docker run -it --rm --env DOCKER_USERNAME=${DOCKER_USERNAME} --env DOCKER_PASSWORD=${DOCKER_PASSWORD} -v $(pwd)/sync.yaml:/opt/sync.yaml dyrnq/skopeo:1.4.1 bash -c "skopeo --insecure-policy sync --src yaml --all --dest-creds \$DOCKER_USERNAME:\$DOCKER_PASSWORD --dest docker /opt/sync.yaml docker.io/dyrnq"
+          docker run --rm --env DOCKER_USERNAME=${DOCKER_USERNAME} --env DOCKER_PASSWORD=${DOCKER_PASSWORD} -v $(pwd)/sync.yaml:/opt/sync.yaml dyrnq/skopeo:1.4.1 bash -c "skopeo --insecure-policy sync --src yaml --all --dest-creds \$DOCKER_USERNAME:\$DOCKER_PASSWORD --dest docker /opt/sync.yaml docker.io/dyrnq"
