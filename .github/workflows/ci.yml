@@ -1,9 +1,9 @@
 name: ci
 
 on:
-  push:
+  # push:
   schedule:
-    - cron:  '0 */8 * * *'
+    - cron:  '0 20 * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
