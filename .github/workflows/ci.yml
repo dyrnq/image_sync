@@ -2,6 +2,8 @@ name: ci
 
 on:
   push:
+    paths-ignore:
+      - '**.md'
   schedule:
     - cron:  '0 20 * * *'
 jobs:
@@ -33,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get -y update
-          sudo apt-get -y install jq ca-certificates curl jq libgpgme11
+          sudo apt-get -y install ca-certificates curl jq libgpgme11
           SKOPEO_VER=v1.4.1
           sudo curl -fsSL -o /usr/bin/skopeo https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo
           sudo chmod +x /usr/bin/skopeo
