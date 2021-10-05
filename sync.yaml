@@ -1,6 +1,6 @@
 k8s.gcr.io:
   images:
-    defaultbackend-amd64: 
+    defaultbackend-amd64:
     defaultbackend:
     coredns/coredns: []
     ingress-nginx/controller:
