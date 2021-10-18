@@ -7,3 +7,4 @@ k8s.gcr.io:
     ingress-nginx/kube-webhook-certgen:
     kube-state-metrics/kube-state-metrics:
     sig-storage/nfs-subdir-external-provisioner:
+    pause:
