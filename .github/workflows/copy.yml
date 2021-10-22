@@ -1,11 +1,13 @@
 name: copy
 
 on:
-  push:
-    paths-ignore:
-      - '**.md'
+  # push:
+  #   paths-ignore:
+  #     - '**.md'
+  #     - .github/workflows/sync.yml
   schedule:
     - cron:  '0 20 * * *'
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -40,7 +42,7 @@ jobs:
           sudo curl -fsSL -o /usr/bin/skopeo https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo
           sudo chmod +x /usr/bin/skopeo
           skopeo -v && skopeo --help
-      - name: Images sync
+      - name: Images copy
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -59,6 +61,10 @@ jobs:
 
 
           done << EOF
+          gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller,docker.io/dyrnq/tektoncd-triggers-cmd-controller
+          gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/eventlistenersink,docker.io/dyrnq/tektoncd-triggers-cmd-eventlistenersink
+          gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/webhook,docker.io/dyrnq/tektoncd-triggers-cmd-webhook
+          gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard,docker.io/dyrnq/tektoncd-dashboard-cmd-dashboard
           gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init,docker.io/dyrnq/tektoncd-pipeline-cmd-git-init
           gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook,docker.io/dyrnq/tektoncd-pipeline-cmd-webhook
           gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller,docker.io/dyrnq/tektoncd-pipeline-cmd-controller
