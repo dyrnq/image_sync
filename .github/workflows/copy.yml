@@ -61,6 +61,7 @@ jobs:
 
 
           done << EOF
+          gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/interceptors,docker.io/dyrnq/tektoncd-triggers-cmd-interceptors
           gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller,docker.io/dyrnq/tektoncd-triggers-cmd-controller
           gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/eventlistenersink,docker.io/dyrnq/tektoncd-triggers-cmd-eventlistenersink
           gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/webhook,docker.io/dyrnq/tektoncd-triggers-cmd-webhook
