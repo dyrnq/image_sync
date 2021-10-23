@@ -61,6 +61,7 @@ jobs:
 
 
           done << EOF
+          k8s.gcr.io/ingress-nginx/controller,docker.io/dyrnq/ingress-nginx-controller
           gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/interceptors,docker.io/dyrnq/tektoncd-triggers-cmd-interceptors
           gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller,docker.io/dyrnq/tektoncd-triggers-cmd-controller
           gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/eventlistenersink,docker.io/dyrnq/tektoncd-triggers-cmd-eventlistenersink
