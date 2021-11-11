@@ -6,7 +6,7 @@ on:
   #     - '**.md'
   #     - .github/workflows/sync.yml
   schedule:
-    - cron:  '0 20 * * *'
+    - cron:  '0 21 * * *'
   workflow_dispatch:
 jobs:
   build:
@@ -38,7 +38,7 @@ jobs:
         run: |
           sudo apt-get -y update
           sudo apt-get -y install ca-certificates curl jq libgpgme11
-          SKOPEO_VER=v1.4.1
+          SKOPEO_VER=v1.5.1
           sudo curl -fsSL -o /usr/bin/skopeo https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo
           sudo chmod +x /usr/bin/skopeo
           skopeo -v && skopeo --help
