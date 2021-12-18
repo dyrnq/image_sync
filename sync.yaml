@@ -7,4 +7,11 @@ k8s.gcr.io:
     ingress-nginx/kube-webhook-certgen:
     kube-state-metrics/kube-state-metrics:
     sig-storage/nfs-subdir-external-provisioner:
+    sig-storage/local-volume-provisioner:
+    sig-storage/snapshot-controller:
+    sig-storage/csi-resizer:
+    sig-storage/csi-provisioner:
+    sig-storage/csi-attacher:
+    sig-storage/csi-node-driver-registrar:
+    git-sync:
     pause:
