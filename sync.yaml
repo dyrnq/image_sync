@@ -15,3 +15,4 @@ k8s.gcr.io:
     sig-storage/csi-node-driver-registrar:
     git-sync:
     pause:
+    metrics-server/metrics-server:
