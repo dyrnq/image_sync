@@ -47,8 +47,8 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          skopeo --insecure-policy copy --all --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://gcr.io/google.com/cloudsdktool/cloud-sdk:302.0.0-slim docker://docker.io/dyrnq/cloud-sdk:302.0.0-slim
-          skopeo --insecure-policy copy --all --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://gcr.io/distroless/base:debug docker://docker.io/dyrnq/distroless-base:debug
+          skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://gcr.io/google.com/cloudsdktool/cloud-sdk:302.0.0-slim docker://docker.io/dyrnq/cloud-sdk:302.0.0-slim
+          skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://gcr.io/distroless/base:debug docker://docker.io/dyrnq/distroless-base:debug
           while read -r line; do
               #echo "${line}"
               scr=$(awk -F, '{print $1}' <<< "${line}")
@@ -56,7 +56,7 @@ jobs:
               #echo $scr
 
               for tag in $(skopeo list-tags docker://"${scr}" | jq -r '.Tags[]' | grep -v "sha" ) ; do
-                skopeo --insecure-policy copy --all --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
+                skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
               done
 
 
