@@ -11,6 +11,26 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        images:
+        - "k8s.gcr.io/ingress-nginx/controller,docker.io/dyrnq/ingress-nginx-controller"
+        - "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/interceptors,docker.io/dyrnq/tektoncd-triggers-cmd-interceptors"
+        - "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller,docker.io/dyrnq/tektoncd-triggers-cmd-controller"
+        - "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/eventlistenersink,docker.io/dyrnq/tektoncd-triggers-cmd-eventlistenersink"
+        - "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/webhook,docker.io/dyrnq/tektoncd-triggers-cmd-webhook"
+        - "gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard,docker.io/dyrnq/tektoncd-dashboard-cmd-dashboard"
+        - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init,docker.io/dyrnq/tektoncd-pipeline-cmd-git-init"
+        - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook,docker.io/dyrnq/tektoncd-pipeline-cmd-webhook"
+        - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller,docker.io/dyrnq/tektoncd-pipeline-cmd-controller"
+        - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter,docker.io/dyrnq/tektoncd-pipeline-cmd-kubeconfigwriter"
+        - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/creds-init,docker.io/dyrnq/tektoncd-pipeline-cmd-creds-init"
+        - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint,docker.io/dyrnq/tektoncd-pipeline-cmd-entrypoint"
+        - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop,docker.io/dyrnq/tektoncd-pipeline-cmd-nop"
+        - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter,docker.io/dyrnq/tektoncd-pipeline-cmd-imagedigestexporter"
+        - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init,docker.io/dyrnq/tektoncd-pipeline-cmd-pullrequest-init"
+        - "gcr.io/google.com/cloudsdktool/cloud-sdk,docker.io/dyrnq/cloud-sdk"        
     steps:
       -
         name: Checkout
@@ -47,34 +67,13 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://gcr.io/google.com/cloudsdktool/cloud-sdk:302.0.0-slim docker://docker.io/dyrnq/cloud-sdk:302.0.0-slim
-          skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://gcr.io/distroless/base:debug docker://docker.io/dyrnq/distroless-base:debug
-          while read -r line; do
-              #echo "${line}"
-              scr=$(awk -F, '{print $1}' <<< "${line}")
-              dest=$(awk -F, '{print $2}' <<< "${line}")
-              #echo $scr
+          line=${{ matrix.images }}
+          echo ${line}
+          scr=$(awk -F, '{print $1}' <<< "${line}")
+          dest=$(awk -F, '{print $2}' <<< "${line}")
+          for tag in $(skopeo list-tags docker://"${scr}" | jq -r '.Tags[]' | grep -v "sha" ) ; do
+            skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
+          done
 
-              for tag in $(skopeo list-tags docker://"${scr}" | jq -r '.Tags[]' | grep -v "sha" ) ; do
-                skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
-              done
-
-
-          done << EOF
-          k8s.gcr.io/ingress-nginx/controller,docker.io/dyrnq/ingress-nginx-controller
-          gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/interceptors,docker.io/dyrnq/tektoncd-triggers-cmd-interceptors
-          gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller,docker.io/dyrnq/tektoncd-triggers-cmd-controller
-          gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/eventlistenersink,docker.io/dyrnq/tektoncd-triggers-cmd-eventlistenersink
-          gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/webhook,docker.io/dyrnq/tektoncd-triggers-cmd-webhook
-          gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard,docker.io/dyrnq/tektoncd-dashboard-cmd-dashboard
-          gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init,docker.io/dyrnq/tektoncd-pipeline-cmd-git-init
-          gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook,docker.io/dyrnq/tektoncd-pipeline-cmd-webhook
-          gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller,docker.io/dyrnq/tektoncd-pipeline-cmd-controller
-          gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter,docker.io/dyrnq/tektoncd-pipeline-cmd-kubeconfigwriter
-          gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/creds-init,docker.io/dyrnq/tektoncd-pipeline-cmd-creds-init
-          gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint,docker.io/dyrnq/tektoncd-pipeline-cmd-entrypoint
-          gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop,docker.io/dyrnq/tektoncd-pipeline-cmd-nop
-          gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter,docker.io/dyrnq/tektoncd-pipeline-cmd-imagedigestexporter
-          gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init,docker.io/dyrnq/tektoncd-pipeline-cmd-pullrequest-init
-          EOF
-
+          # skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://gcr.io/google.com/cloudsdktool/cloud-sdk:302.0.0-slim docker://docker.io/dyrnq/cloud-sdk:302.0.0-slim
+          # skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://gcr.io/distroless/base:debug docker://docker.io/dyrnq/distroless-base:debug
