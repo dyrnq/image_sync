@@ -3,7 +3,7 @@ k8s.gcr.io:
     defaultbackend-amd64:
     defaultbackend:
     coredns/coredns: []
-    ingress-nginx/controller:
+    #ingress-nginx/controller:
     ingress-nginx/kube-webhook-certgen:
     kube-state-metrics/kube-state-metrics:
     sig-storage/nfs-subdir-external-provisioner:
