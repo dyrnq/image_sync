@@ -31,7 +31,15 @@ jobs:
         - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop,docker.io/dyrnq/tektoncd-pipeline-cmd-nop"
         - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter,docker.io/dyrnq/tektoncd-pipeline-cmd-imagedigestexporter"
         - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init,docker.io/dyrnq/tektoncd-pipeline-cmd-pullrequest-init"
-        - "gcr.io/google.com/cloudsdktool/cloud-sdk,docker.io/dyrnq/cloud-sdk"        
+        - "gcr.io/google.com/cloudsdktool/cloud-sdk,docker.io/dyrnq/cloud-sdk"
+        - "k8s.gcr.io/sig-storage/nfs-subdir-external-provisioner,docker.io/dyrnq/nfs-subdir-external-provisioner"
+        - "k8s.gcr.io/sig-storage/local-volume-provisioner,docker.io/dyrnq/local-volume-provisioner"
+        - "k8s.gcr.io/sig-storage/snapshot-controller,docker.io/dyrnq/snapshot-controller"
+        - "k8s.gcr.io/sig-storage/csi-resizer,docker.io/dyrnq/csi-resizer"
+        - "k8s.gcr.io/sig-storage/csi-provisioner,docker.io/dyrnq/csi-provisioner"
+        - "k8s.gcr.io/sig-storage/csi-attacher,docker.io/dyrnq/csi-attacher"
+        - "k8s.gcr.io/sig-storage/csi-node-driver-registrar,docker.io/dyrnq/csi-node-driver-registrar"
+        - "k8s.gcr.io/ingress-nginx/kube-webhook-certgen,docker.io/dyrnq/kube-webhook-certgen"
     steps:
       -
         name: Checkout
@@ -59,8 +67,8 @@ jobs:
         run: |
           sudo apt-get -y update
           sudo apt-get -y install ca-certificates curl jq libgpgme11
-          SKOPEO_VER=v1.7.0
-          sudo curl -fsSL -o /usr/bin/skopeo https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo
+          SKOPEO_VER=v1.8.0
+          sudo curl -fsSL https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo.tar.xz | sudo tar -xvJ -C /usr/bin
           sudo chmod +x /usr/bin/skopeo
           skopeo -v && skopeo --help
       - name: Images copy
