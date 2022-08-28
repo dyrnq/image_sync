@@ -1,18 +1,48 @@
-k8s.gcr.io:
-  images:
-    defaultbackend-amd64:
-    defaultbackend:
-    coredns/coredns: []
-    #ingress-nginx/controller:
-    #ingress-nginx/kube-webhook-certgen:
-    kube-state-metrics/kube-state-metrics:
-    # sig-storage/nfs-subdir-external-provisioner:
-    # sig-storage/local-volume-provisioner:
-    # sig-storage/snapshot-controller:
-    # sig-storage/csi-resizer:
-    # sig-storage/csi-provisioner:
-    # sig-storage/csi-attacher:
-    # sig-storage/csi-node-driver-registrar:
-    git-sync:
-    pause:
-    metrics-server/metrics-server:
+# k8s.gcr.io:
+#   images:
+#     defaultbackend-amd64:
+#     defaultbackend:
+#     #coredns/coredns: []
+#     #ingress-nginx/controller:
+#     #ingress-nginx/kube-webhook-certgen:
+#     kube-state-metrics/kube-state-metrics:
+#     # sig-storage/nfs-subdir-external-provisioner:
+#     # sig-storage/local-volume-provisioner:
+#     # sig-storage/snapshot-controller:
+#     # sig-storage/csi-resizer:
+#     # sig-storage/csi-provisioner:
+#     # sig-storage/csi-attacher:
+#     # sig-storage/csi-node-driver-registrar:
+#     git-sync:
+#     #pause:
+#     metrics-server/metrics-server:
+registry.k8s.io:
+  # images:
+  images-by-tag-regex:
+    defaultbackend-amd64: ^(latest|v.*|\d+\..*)$
+    defaultbackend: ^(latest|v.*|\d+\..*)$
+    coredns/coredns: ^(latest|v.*)$
+    ingress-nginx/controller: ^(latest|v.*)$
+    ingress-nginx/kube-webhook-certgen: ^(latest|v.*)$
+    kube-state-metrics/kube-state-metrics: ^(latest|v.*)$
+    sig-storage/nfs-subdir-external-provisioner: ^(latest|v.*)$
+    sig-storage/local-volume-provisioner: ^(latest|v.*)$
+    sig-storage/snapshot-controller: ^(latest|v.*)$
+    sig-storage/csi-resizer: ^(latest|v.*)$
+    sig-storage/csi-provisioner: ^(latest|v.*)$
+    sig-storage/csi-attacher: ^(latest|v.*)$
+    sig-storage/csi-node-driver-registrar: ^(latest|v.*)$
+    sig-storage/csi-snapshotter: ^(latest|v.*)$
+    sig-storage/nfsplugin: ^(latest|v.*)$
+    sig-storage/livenessprobe: ^(latest|v.*)$
+    sig-storage/csi-external-health-monitor-controller: ^(latest|v.*)$
+    sig-storage/snapshot-validation-webhook: ^(latest|v.*)$
+    git-sync: ^(latest|v.*)$
+    pause: ^(latest|\d+\.\d+)$
+    etcd: ^(latest|v.*|\d+\..*)$
+    metrics-server/metrics-server: ^(latest|v.*)$
+    kube-apiserver: ^(latest|v.*)$
+    kube-controller-manager: ^(latest|v.*)$
+    kube-scheduler: ^(latest|v.*)$
+    kube-proxy: ^(latest|v.*)$
+    dns/k8s-dns-node-cache: ^(latest|v.*|\d+\..*)$
