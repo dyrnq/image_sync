@@ -30,6 +30,7 @@ jobs:
         - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter,docker.io/dyrnq/tektoncd-pipeline-cmd-imagedigestexporter"
         - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init,docker.io/dyrnq/tektoncd-pipeline-cmd-pullrequest-init"
         - "gcr.io/google.com/cloudsdktool/cloud-sdk,docker.io/dyrnq/cloud-sdk"
+        - "ghcr.io/open-webui/open-webui,docker.io/dyrnq/open-webui"
         # - "registry.k8s.io/sig-storage/nfs-subdir-external-provisioner,docker.io/dyrnq/nfs-subdir-external-provisioner"
         # - "registry.k8s.io/sig-storage/local-volume-provisioner,docker.io/dyrnq/local-volume-provisioner"
         # - "registry.k8s.io/sig-storage/snapshot-controller,docker.io/dyrnq/snapshot-controller"
