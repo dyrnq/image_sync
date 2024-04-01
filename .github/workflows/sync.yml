@@ -11,6 +11,118 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        images:
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              defaultbackend-amd64: ^(latest|v.*|\d+\..*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              defaultbackend: ^(latest|v.*|\d+\..*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              coredns/coredns: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              ingress-nginx/controller: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              ingress-nginx/kube-webhook-certgen: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-state-metrics/kube-state-metrics: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/nfs-subdir-external-provisioner: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/local-volume-provisioner: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/snapshot-controller: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/csi-resizer: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/csi-provisioner: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/csi-attacher: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/csi-node-driver-registrar: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/csi-snapshotter: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/nfsplugin: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/livenessprobe: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/csi-external-health-monitor-controller: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              sig-storage/snapshot-validation-webhook: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              git-sync: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              pause: ^(latest|\d+\.\d+)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              etcd: ^(latest|v.*|\d+\..*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              metrics-server/metrics-server: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-apiserver: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-controller-manager: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-scheduler: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-proxy: ^(latest|v.*)$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              dns/k8s-dns-node-cache: ^(latest|v.*|\d+\..*)$
     steps:
       -
         name: Checkout
@@ -47,4 +159,13 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          skopeo --insecure-policy sync --keep-going --src yaml --all --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD --dest docker sync.yaml docker.io/dyrnq
+          sync_tmp=$(mktemp "sync_XXXXX.yml" --tmpdir=/tmp/)
+          echo ${sync_tmp}
+
+          cat >${sync_tmp}<<EOF
+          ${{ matrix.images }}
+          EOF
+
+          cat < ${sync_tmp}
+
+          skopeo --insecure-policy sync --keep-going --src yaml --all --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD --dest docker ${sync_tmp} docker.io/dyrnq
