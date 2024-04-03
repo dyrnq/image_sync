@@ -56,7 +56,7 @@ jobs:
         #- "registry.k8s.io/ingress-nginx/kube-webhook-certgen,docker.io/dyrnq/kube-webhook-certgen"
         - "cr.yandex/crp9ftr22d26age3hulg/yandex-cloud/csi-s3/csi-s3-driver,docker.io/dyrnq/csi-s3-driver"
         # - "cr.yandex/crp9ftr22d26age3hulg/yandex-cloud/csi-s3/csi-provisioner,docker.io/dyrnq/csi-provisioner"
-        - "cr.yandex/crp9ftr22d26age3hulg/yandex-cloud/csi-s3/csi-node-driver-registrar,docker.io/dyrnq/csi-node-driver-registrar"
+        # - "cr.yandex/crp9ftr22d26age3hulg/yandex-cloud/csi-s3/csi-node-driver-registrar,docker.io/dyrnq/csi-node-driver-registrar"
     steps:
       -
         name: Checkout
