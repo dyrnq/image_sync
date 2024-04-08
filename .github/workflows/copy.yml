@@ -102,11 +102,11 @@ jobs:
           if grep -q -E "open-webui" <<< "$src"; then
             tags=$(curl -fsSL --retry 10 "https://github.com/open-webui/open-webui/pkgs/container/open-webui/versions?filters%5Bversion_type%5D=tagged" | grep -E "<a.*>git-|<a.*>main|<a.*>dev|<a.*>latest" | sed -n 's/.*<a.*>\(.*\)<\/a>.*/\1/p')
             for tag in $tags ; do
-              skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
+              skopeo --insecure-policy copy --all --retry-times 20 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
             done
           else
           for tag in $(skopeo list-tags docker://"${scr}" | jq -r '.Tags[]' | grep -v "sha" ) ; do
-            skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
+            skopeo --insecure-policy copy --all --retry-times 20 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
           done
           fi
 
