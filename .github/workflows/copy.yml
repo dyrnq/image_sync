@@ -84,7 +84,7 @@ jobs:
         run: |
           sudo apt-get -y update
           sudo apt-get -y install ca-certificates curl jq libgpgme11
-          SKOPEO_VER=v1.11.0
+          SKOPEO_VER=v1.15.1
           sudo curl -# -fSL https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo.tar.xz | sudo tar -xvJ -C /usr/bin
           sudo chmod +x /usr/bin/skopeo
           skopeo -v && skopeo --help
