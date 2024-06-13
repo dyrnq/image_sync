@@ -1,4 +1,4 @@
-name: copy
+name: copy-open-webui
 
 on:
   # push:
@@ -24,8 +24,11 @@ jobs:
             json="${json}\"${tag}\","
           done
           json=${json%,}  # 删除最后一个逗号
-          json="${json}]"
+          json="${json}]}"
           echo ::set-output name=matrix::${json}
+      - name: Test version
+        run: |
+          echo ${{ steps.set-matrix.outputs.matrix }}
 
   build:
     runs-on: ubuntu-latest
