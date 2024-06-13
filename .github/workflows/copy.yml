@@ -30,7 +30,7 @@ jobs:
         - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter,docker.io/dyrnq/tektoncd-pipeline-cmd-imagedigestexporter"
         - "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init,docker.io/dyrnq/tektoncd-pipeline-cmd-pullrequest-init"
         - "gcr.io/google.com/cloudsdktool/cloud-sdk,docker.io/dyrnq/cloud-sdk"
-        - "ghcr.io/open-webui/open-webui,docker.io/dyrnq/open-webui"
+        # - "ghcr.io/open-webui/open-webui,docker.io/dyrnq/open-webui"
         # - "registry.k8s.io/sig-storage/nfs-subdir-external-provisioner,docker.io/dyrnq/nfs-subdir-external-provisioner"
         # - "registry.k8s.io/sig-storage/local-volume-provisioner,docker.io/dyrnq/local-volume-provisioner"
         # - "registry.k8s.io/sig-storage/snapshot-controller,docker.io/dyrnq/snapshot-controller"
@@ -99,16 +99,11 @@ jobs:
           dest=$(awk -F, '{print $2}' <<< "${line}")
           # desttags=$(skopeo list-tags --retry-times 5 docker://"${dest}" | jq -r '.Tags | @csv ')
 
-          if grep -q -E "open-webui" <<< "$src"; then
-            tags=$(curl -fsSL --retry 10 "https://github.com/open-webui/open-webui/pkgs/container/open-webui/versions?filters%5Bversion_type%5D=tagged" | grep -E "<a.*>git-|<a.*>main|<a.*>dev|<a.*>latest" | sed -n 's/.*<a.*>\(.*\)<\/a>.*/\1/p')
-            for tag in $tags ; do
-              skopeo --insecure-policy copy --all --retry-times 20 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
-            done
-          else
+
           for tag in $(skopeo list-tags docker://"${scr}" | jq -r '.Tags[]' | grep -v "sha" ) ; do
             skopeo --insecure-policy copy --all --retry-times 20 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
           done
-          fi
+
 
           # skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://gcr.io/google.com/cloudsdktool/cloud-sdk:302.0.0-slim docker://docker.io/dyrnq/cloud-sdk:302.0.0-slim
           # skopeo --insecure-policy copy --all --retry-times 5 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://gcr.io/distroless/base:debug docker://docker.io/dyrnq/distroless-base:debug
