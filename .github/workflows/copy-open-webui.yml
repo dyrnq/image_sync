@@ -18,12 +18,19 @@ jobs:
       - uses: actions/checkout@v3
       - id: set-matrix
         run: |
-          tags=$(curl -fsSL --retry 100 "https://github.com/open-webui/open-webui/pkgs/container/open-webui/versions?filters%5Bversion_type%5D=tagged" | grep -E "<a.*>git-|<a.*>main|<a.*>dev|<a.*>latest" | sed -n 's/.*<a.*>\(.*\)<\/a>.*/\1/p')
+          sudo apt-get -y update
+          sudo apt-get -y install ca-certificates curl jq libgpgme11
+          SKOPEO_VER=v1.15.1
+          sudo curl -# -fSL https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo.tar.xz | sudo tar -xvJ -C /usr/bin
+          sudo chmod +x /usr/bin/skopeo
+          skopeo -v && skopeo --help
+          #tags=$(curl -fsSL --retry 100 "https://github.com/open-webui/open-webui/pkgs/container/open-webui/versions?filters%5Bversion_type%5D=tagged" | grep -E "<a.*>git-|<a.*>main|<a.*>dev|<a.*>latest" | sed -n 's/.*<a.*>\(.*\)<\/a>.*/\1/p')
+          tags=$(skopeo list-tags docker://ghcr.io/open-webui/open-webui | jq -r '.Tags[]')
           json="{\"tags\":["
           for tag in $tags ; do
             json="${json}\"${tag}\","
           done
-          json=${json%,}  # 删除最后一个逗号
+          json=${json%,}
           json="${json}]}"
           echo ::set-output name=matrix::${json}
       - name: Test version
