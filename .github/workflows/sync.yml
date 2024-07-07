@@ -106,19 +106,19 @@ jobs:
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-apiserver: ^(latest|v.*)$
+              kube-apiserver: ^(latest|v1.(2[0-9]|[3-9][0-9].*)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-controller-manager: ^(latest|v.*)$
+              kube-controller-manager: ^(latest|v1.(2[0-9]|[3-9][0-9].*)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-scheduler: ^(latest|v.*)$
+              kube-scheduler: ^(latest|v1.(2[0-9]|[3-9][0-9].*)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-proxy: ^(latest|v.*)$
+              kube-proxy: ^(latest|v1.(2[0-9]|[3-9][0-9].*)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
