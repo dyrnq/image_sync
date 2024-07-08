@@ -6,7 +6,7 @@ on:
   #     - '**.md'
   #     - .github/workflows/sync.yml
   schedule:
-    - cron:  '0 21 * * *'
+    - cron:  '0 21 * * 0,1,3,5'
   workflow_dispatch:
 jobs:
   build:
