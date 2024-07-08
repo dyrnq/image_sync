@@ -1,4 +1,4 @@
-name: sync
+name: sync-kube
 
 on:
   # push:
@@ -14,23 +14,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        images:        
+        images:
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-apiserver: ^(latest|v1.(2[0-9]|[3-9][0-9]).*)$
+              kube-apiserver: ^(latest|v1.(2[0-9]|[3-9][0-9])(?!.*-alpha)(?!.*-beta).*)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-controller-manager: ^(latest|v1.(2[0-9]|[3-9][0-9]).*)$
+              kube-controller-manager: ^(latest|v1.(2[0-9]|[3-9][0-9])(?!.*-alpha)(?!.*-beta).*)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-scheduler: ^(latest|v1.(2[0-9]|[3-9][0-9]).*)$
+              kube-scheduler: ^(latest|v1.(2[0-9]|[3-9][0-9])(?!.*-alpha)(?!.*-beta).*)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-proxy: ^(latest|v1.(2[0-9]|[3-9][0-9]).*)$
+              kube-proxy: ^(latest|v1.(2[0-9]|[3-9][0-9])(?!.*-alpha)(?!.*-beta).*)$
 
     steps:
       -
