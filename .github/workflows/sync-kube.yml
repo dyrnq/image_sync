@@ -18,20 +18,67 @@ jobs:
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-apiserver: ^(latest|v1.(2[0-9]|[3-9][0-9]).\d{1,2})$
+              kube-apiserver: ^(latest|v1.([3-9][0-9]).\d{1,2})$
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-controller-manager: ^(latest|v1.(2[0-9]|[3-9][0-9]).\d{1,2})$
+              kube-controller-manager: ^(latest|v1.([3-9][0-9]).\d{1,2})$
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-scheduler: ^(latest|v1.(2[0-9]|[3-9][0-9]).\d{1,2})$
+              kube-scheduler: ^(latest|v1.([3-9][0-9]).\d{1,2})$
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              kube-proxy: ^(latest|v1.(2[0-9]|[3-9][0-9]).\d{1,2})$
-
+              kube-proxy: ^(latest|v1.([3-9][0-9]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-apiserver: ^(v1.(2[0-3]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-controller-manager: ^(v1.(2[0-3]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-scheduler: ^(v1.(2[0-3]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-proxy: ^(v1.(2[0-3]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-apiserver: ^(v1.(2[4-6]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-controller-manager: ^(v1.(2[4-6]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-scheduler: ^(v1.(2[4-6]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-proxy: ^(v1.(2[4-6]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-apiserver: ^(v1.(2[7-9]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-controller-manager: ^(v1.(2[7-9]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-scheduler: ^(v1.(2[7-9]).\d{1,2})$
+        - |
+          registry.k8s.io:
+            images-by-tag-regex:
+              kube-proxy: ^(v1.(2[7-9]).\d{1,2})$
     steps:
       -
         name: Checkout
