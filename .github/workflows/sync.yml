@@ -172,4 +172,4 @@ jobs:
 
           cat < ${sync_tmp}
 
-          skopeo --insecure-policy sync --keep-going --src yaml --all --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD --dest docker ${sync_tmp} docker.io/dyrnq
+          skopeo --insecure-policy sync --format v2s2 --keep-going --src yaml --all --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD --dest docker ${sync_tmp} docker.io/dyrnq
