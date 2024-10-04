@@ -110,6 +110,11 @@ jobs:
           sudo curl -# -fSL https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo.tar.xz | sudo tar -xvJ -C /usr/bin
           sudo chmod +x /usr/bin/skopeo
           skopeo -v && skopeo --help
+      - name: Install regctl
+        run: |
+          sudo curl -# -fSL -o /usr/local/bin/regctl https://github.com/regclient/regclient/releases/download/v0.7.1/regctl-linux-amd64
+          sudo chmod +x /usr/local/bin/regctl
+          regctl version
       - name: Images sync
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -124,4 +129,4 @@ jobs:
 
           cat < ${sync_tmp}
 
-          skopeo --insecure-policy sync --format v2s2 --keep-going --src yaml --all --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD --dest docker ${sync_tmp} docker.io/dyrnq
+          skopeo --insecure-policy sync --keep-going --src yaml --all --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD --dest docker ${sync_tmp} docker.io/dyrnq
