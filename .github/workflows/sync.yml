@@ -15,18 +15,18 @@ jobs:
       fail-fast: false
       matrix:
         images:
-        - |
-          registry.k8s.io:
-            images-by-tag-regex:
-              defaultbackend-amd64: ^(latest|v.*|\d+\..*)$
+        # - |
+        #   registry.k8s.io:
+        #     images-by-tag-regex:
+        #       defaultbackend-amd64: ^(latest|v.*|\d+\..*)$
         # - |
         #   registry.k8s.io:
         #     images-by-tag-regex:
         #       defaultbackend-arm64: ^(latest|v.*|\d+\..*)$
-        - |
-          registry.k8s.io:
-            images-by-tag-regex:
-              defaultbackend: ^(latest|v.*|\d+\..*)$
+        # - |
+        #   registry.k8s.io:
+        #     images-by-tag-regex:
+        #       defaultbackend: ^(latest|v.*|\d+\..*)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
