@@ -94,11 +94,11 @@ jobs:
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              git-sync: ^(latest|v.*)$
+              git-sync: ^(latest|v(?!2\.0\.[0-3]).*)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              pause: ^(latest|\d+\.\d+)$
+              pause: ^(latest|(?!2\.0|3\.0)\d+\.\d+)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
