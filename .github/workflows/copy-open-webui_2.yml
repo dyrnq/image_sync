@@ -1,0 +1,99 @@
+name: copy-open-webui_2
+
+on:
+  # push:
+  #   paths-ignore:
+  #     - '**.md'
+  #     - .github/workflows/sync.yml
+  schedule:
+    - cron:  '0 20 * * *'
+  workflow_dispatch:
+jobs:
+  generate-matrix:
+    name: Generate Job Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: set-matrix
+        run: |
+          sudo apt-get -y update
+          sudo apt-get -y install ca-certificates curl jq libgpgme11
+          SKOPEO_VER=v1.15.2
+          sudo curl -# -fSL https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo.tar.xz | sudo tar -xvJ -C /usr/bin
+          sudo chmod +x /usr/bin/skopeo
+          skopeo -v && skopeo --help
+          #tags=$(curl -fsSL --retry 100 "https://github.com/open-webui/open-webui/pkgs/container/open-webui/versions?filters%5Bversion_type%5D=tagged" | grep -E "<a.*>git-|<a.*>main|<a.*>dev|<a.*>latest" | sed -n 's/.*<a.*>\(.*\)<\/a>.*/\1/p')
+          tags=$(skopeo list-tags docker://ghcr.io/open-webui/open-webui | jq -r '.Tags[]' |grep -v ^git | tail -300 | head -n 256)
+          json="{\"tags\":["
+          for tag in $tags ; do
+            json="${json}\"${tag}\","
+          done
+          json=${json%,}
+          json="${json}]}"
+          echo ::set-output name=matrix::${json}
+      - name: Test version
+        run: |
+          echo ${{ steps.set-matrix.outputs.matrix }}
+
+  build:
+    runs-on: ubuntu-latest
+    if: needs.generate-matrix.outputs.matrix != ''
+    needs: [generate-matrix]
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJSON(needs.generate-matrix.outputs.matrix)}}
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+
+      # -
+      #   name: Set up Docker Buildx
+      #   id: buildx
+      #   uses: docker/setup-buildx-action@v1
+      # -
+      #   name: Inspect builder
+      #   run: |
+      #     echo "Name:      ${{ steps.buildx.outputs.name }}"
+      #     echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
+      #     echo "Status:    ${{ steps.buildx.outputs.status }}"
+      #     echo "Flags:     ${{ steps.buildx.outputs.flags }}"
+      #     echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
+      # -
+      #   name: Login to DockerHub
+      #   uses: docker/login-action@v1
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get -y update
+          sudo apt-get -y install ca-certificates curl jq libgpgme11
+          SKOPEO_VER=v1.15.2
+          sudo curl -# -fSL https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo.tar.xz | sudo tar -xvJ -C /usr/bin
+          sudo chmod +x /usr/bin/skopeo
+          skopeo -v && skopeo --help
+      - name: Install regctl
+        run: |
+          sudo curl -# -fSL -o /usr/local/bin/regctl https://github.com/regclient/regclient/releases/download/v0.7.2/regctl-linux-amd64
+          sudo chmod +x /usr/local/bin/regctl
+          regctl version
+      - name: Images copy
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          line="ghcr.io/open-webui/open-webui,docker.io/dyrnq/open-webui"
+          scr=$(awk -F, '{print $1}' <<< "${line}")
+          dest=$(awk -F, '{print $2}' <<< "${line}")
+          tag=${{ matrix.tags }}
+          echo ${tag}
+
+          schemaVersion=$(regctl manifest get docker://"${scr}":"${tag}" --format raw-body | jq -r '.schemaVersion')
+          if [ "${schemaVersion}" = "1" ]; then
+            echo "schemaVersion=1, skip copy"
+          else
+            skopeo --insecure-policy copy --all --retry-times 20 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"  
+          fi
