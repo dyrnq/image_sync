@@ -25,7 +25,7 @@ jobs:
           sudo chmod +x /usr/bin/skopeo
           skopeo -v && skopeo --help
           #tags=$(curl -fsSL --retry 100 "https://github.com/open-webui/open-webui/pkgs/container/open-webui/versions?filters%5Bversion_type%5D=tagged" | grep -E "<a.*>git-|<a.*>main|<a.*>dev|<a.*>latest" | sed -n 's/.*<a.*>\(.*\)<\/a>.*/\1/p')
-          tags=$(skopeo list-tags docker://ghcr.io/open-webui/open-webui | jq -r '.Tags[]' |grep -v ^git |grep -v ^cache | tail -300 | head -n 256)
+          tags=$(skopeo list-tags docker://ghcr.io/open-webui/open-webui | jq -r '.Tags[]' |grep -v ^git |grep -v ^cache | head -n512 | tail -n 256)
           json="{\"tags\":["
           for tag in $tags ; do
             json="${json}\"${tag}\","
