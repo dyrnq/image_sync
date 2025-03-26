@@ -6,7 +6,7 @@ on:
   #     - '**.md'
   #     - .github/workflows/sync.yml
   schedule:
-    - cron:  '0 20 * * *'
+    - cron:  '0 22 * * *'
   workflow_dispatch:
 jobs:
   generate-matrix:

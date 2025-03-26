@@ -6,7 +6,7 @@ on:
   #     - '**.md'
   #     - .github/workflows/copy.yml
   schedule:
-    - cron:  '0 20 * * 2,4,6'
+    - cron:  '0 6 * * 2,4,6'
   workflow_dispatch:
 jobs:
   build:
@@ -102,7 +102,7 @@ jobs:
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              etcd: ^(latest|v.*|\d+\..*)$
+              etcd: ^(?!2\.0\.9)(latest|v.*|\d+\..*)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
