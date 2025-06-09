@@ -1,4 +1,4 @@
-name: sync
+name: sync-ingress-nginx
 
 on:
   # push:
@@ -6,7 +6,7 @@ on:
   #     - '**.md'
   #     - .github/workflows/copy.yml
   schedule:
-    - cron:  '0 6 * * 1,2,3,4,5,6'
+    - cron:  '0 6 * * 0,1,2,3,4,5,6'
   workflow_dispatch:
 jobs:
   build:
