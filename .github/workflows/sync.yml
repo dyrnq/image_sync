@@ -34,14 +34,6 @@ jobs:
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              ingress-nginx/controller: ^(latest|v.*)$
-        - |
-          registry.k8s.io:
-            images-by-tag-regex:
-              ingress-nginx/kube-webhook-certgen: ^(latest|v.*)$
-        - |
-          registry.k8s.io:
-            images-by-tag-regex:
               kube-state-metrics/kube-state-metrics: ^(latest|v.*)$
         - |
           registry.k8s.io:
