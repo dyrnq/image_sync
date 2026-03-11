@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         images:
-        - "ghcr.io/openclaw/openclaw"
+        - "ghcr.io/openclaw/openclaw,docker.io/dyrnq/openclaw"
     steps:
       -
         name: Checkout
