@@ -91,7 +91,7 @@ jobs:
           tags=$(skopeo list-tags docker://ghcr.io/open-webui/open-webui | jq -r '.Tags[]' | grep -v ^git- |sort -r)
           #tag=${{ matrix.tags }}
 
-          for targ in $tags;do
+          for tag in $tags;do
           echo ${tag}
 
           schemaVersion=$(regctl manifest get docker://"${scr}":"${tag}" --format raw-body | jq -r '.schemaVersion')
