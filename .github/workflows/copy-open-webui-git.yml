@@ -30,7 +30,7 @@ jobs:
           tags_page=$(curl -fsSL --retry 100 "https://github.com/open-webui/open-webui/pkgs/container/open-webui/versions?filters%5Bversion_type%5D=tagged&page=${i}" | grep -E "<a.*>git-" | sed -n 's/.*<a.*>\(.*\)<\/a>.*/\1/p')
           if [[ -z "$tags_page" ]]; then break; fi
           for t in $tags_page;do
-            if (( ${#tags[@]} > 256 )); then
+            if (( ${#tags[@]} > 255 )); then
               break 2;
             fi
             tags+=("$t")
