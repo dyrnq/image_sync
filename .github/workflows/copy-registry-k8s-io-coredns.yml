@@ -90,7 +90,7 @@ jobs:
           dest=$(awk -F, '{print $2}' <<< "${line}")
           tag=${{ matrix.tags }}
 
-          for tag in $tags;do
+
           echo ${tag}
 
           schemaVersion=$(regctl manifest get docker://"${scr}":"${tag}" --format raw-body | jq -r '.schemaVersion')
@@ -99,4 +99,4 @@ jobs:
           else
             skopeo --insecure-policy copy --all --retry-times 20 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
           fi
-          done
+
