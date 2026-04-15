@@ -1,0 +1,45 @@
+name: cache-open-webui-tags
+
+on:
+  # push:
+  #   paths-ignore:
+  #     - '**.md'
+  #     - .github/workflows/sync.yml
+  schedule:
+    - cron:  '*/30 * * * *'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get -y update
+          sudo apt-get -y install ca-certificates curl jq libgpgme11
+          SKOPEO_VER=v1.22.0
+          sudo curl -# -fSL https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo.tar.xz | sudo tar -xvJ -C /usr/bin
+          sudo chmod +x /usr/bin/skopeo
+          skopeo -v && skopeo --help
+      - name: Install regctl
+        run: |
+          sudo curl -# -fSL -o /usr/local/bin/regctl https://github.com/regclient/regclient/releases/download/v0.11.2/regctl-linux-amd64
+          sudo chmod +x /usr/local/bin/regctl
+          regctl version
+      - name: Images copy
+        run: |
+          tags=$(skopeo list-tags docker://ghcr.io/open-webui/open-webui | jq -r '.Tags[]' | grep -v ^git- |sort -r)
+          if [ -n "${tags}" ];then
+            echo "${tags}" > open-webui-tags.md
+          fi
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: dyrnq
+          author_email: dyrnq@qq.com
+          message: 'open-webui-tags.md'
+          add: 'open-webui-tags.md --force'
