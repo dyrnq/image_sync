@@ -15,22 +15,6 @@ jobs:
       fail-fast: false
       matrix:
         images:
-        # - |
-        #   registry.k8s.io:
-        #     images-by-tag-regex:
-        #       defaultbackend-amd64: ^(latest|v.*|\d+\..*)$
-        # - |
-        #   registry.k8s.io:
-        #     images-by-tag-regex:
-        #       defaultbackend-arm64: ^(latest|v.*|\d+\..*)$
-        # - |
-        #   registry.k8s.io:
-        #     images-by-tag-regex:
-        #       defaultbackend: ^(latest|v.*|\d+\..*)$
-        - |
-          registry.k8s.io:
-            images-by-tag-regex:
-              coredns/coredns: ^(latest|v.*)$
         - |
           registry.k8s.io:
             images-by-tag-regex:
@@ -87,38 +71,6 @@ jobs:
           registry.k8s.io:
             images-by-tag-regex:
               git-sync: ^(latest|v(?!2\.0\.[0-3]).*)$
-        - |
-          registry.k8s.io:
-            images-by-tag-regex:
-              pause: ^(latest|(?!2\.0|3\.0)\d+\.\d+)$
-        - |
-          registry.k8s.io:
-            images-by-tag-regex:
-              etcd: ^(?!2\.0\.9)(latest|v.*|\d+\..*)$
-        - |
-          registry.k8s.io:
-            images-by-tag-regex:
-              metrics-server/metrics-server: ^(latest|v.*)$
-        # - |
-        #   registry.k8s.io:
-        #     images-by-tag-regex:
-        #       kube-apiserver: ^(latest|v1.(2[0-9]|[3-9][0-9]).*)$
-        # - |
-        #   registry.k8s.io:
-        #     images-by-tag-regex:
-        #       kube-controller-manager: ^(latest|v1.(2[0-9]|[3-9][0-9]).*)$
-        # - |
-        #   registry.k8s.io:
-        #     images-by-tag-regex:
-        #       kube-scheduler: ^(latest|v1.(2[0-9]|[3-9][0-9]).*)$
-        # - |
-        #   registry.k8s.io:
-        #     images-by-tag-regex:
-        #       kube-proxy: ^(latest|v1.(2[0-9]|[3-9][0-9]).*)$
-        - |
-          registry.k8s.io:
-            images-by-tag-regex:
-              dns/k8s-dns-node-cache: ^(latest|v.*|\d+\..*)$
     steps:
       -
         name: Checkout
