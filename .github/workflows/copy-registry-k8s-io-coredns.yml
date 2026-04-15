@@ -84,6 +84,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
+          set -x;
           line="registry.k8s.io/coredns/coredns,docker.io/dyrnq/coredns"
           scr=$(awk -F, '{print $1}' <<< "${line}")
           dest=$(awk -F, '{print $2}' <<< "${line}")
