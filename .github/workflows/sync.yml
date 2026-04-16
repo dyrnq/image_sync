@@ -121,4 +121,4 @@ jobs:
 
           cat < ${sync_tmp}
 
-          skopeo --insecure-policy sync --keep-going --src yaml --all --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD --dest docker ${sync_tmp} docker.io/dyrnq
+          skopeo --insecure-policy sync --keep-going --retry-times 30 --retry-delay 10s --src yaml --all --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD --dest docker ${sync_tmp} docker.io/dyrnq
