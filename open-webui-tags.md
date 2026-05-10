@@ -1,3 +1,8 @@
+v0.9.5-slim
+v0.9.5-ollama
+v0.9.5-cuda126
+v0.9.5-cuda
+v0.9.5
 v0.9.4-slim
 v0.9.4-ollama
 v0.9.4-cuda126
@@ -551,6 +556,11 @@ cache-cuda-linux-arm64-main
 cache-cuda-linux-arm64-dev
 cache-cuda-linux-amd64-main
 cache-cuda-linux-amd64-dev
+0.9.5-slim
+0.9.5-ollama
+0.9.5-cuda126
+0.9.5-cuda
+0.9.5
 0.9.4-slim
 0.9.4-ollama
 0.9.4-cuda126
