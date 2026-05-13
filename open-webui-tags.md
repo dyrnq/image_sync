@@ -544,6 +544,8 @@ cache-ollama-linux-arm64-main
 cache-ollama-linux-arm64-dev
 cache-ollama-linux-amd64-main
 cache-ollama-linux-amd64-dev
+cache-main-linux-arm64-dev
+cache-main-linux-amd64-dev
 cache-linux-arm64-main
 cache-linux-arm64-dev
 cache-linux-amd64-main
