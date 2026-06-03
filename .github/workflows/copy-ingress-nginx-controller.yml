@@ -16,7 +16,7 @@ jobs:
       matrix:
         images:
         - "registry.k8s.io/ingress-nginx/controller,docker.io/dyrnq/ingress-nginx-controller"
-        - "cr.yandex/crp9ftr22d26age3hulg/yandex-cloud/csi-s3/csi-s3-driver,docker.io/dyrnq/csi-s3-driver"
+        - "registry.k8s.io/ingress-nginx/kube-webhook-certgen,docker.io/dyrnq/ingress-nginx-kube-webhook-certgen"
     steps:
       -
         name: Checkout
