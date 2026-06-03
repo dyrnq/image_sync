@@ -1,4 +1,4 @@
-name: sync-pause
+name: sync-etcd
 
 on:
   # push:
@@ -18,7 +18,7 @@ jobs:
         - |
           registry.k8s.io:
             images-by-tag-regex:
-              pause: ^(latest|[14-9]\.\d+|2\.[1-9]\d*|3\.[1-9]\d*)$
+              etcd: ^(latest|v.*|\d+\..*)$
     steps:
       -
         name: Checkout
