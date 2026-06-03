@@ -31,7 +31,7 @@ jobs:
           done
           json=${json%,}
           json="${json}]}"
-          echo ::set-output name=matrix::${json}
+          echo "matrix=${json}" >> $GITHUB_OUTPUT
       - name: Test version
         run: |
           echo ${{ steps.set-matrix.outputs.matrix }}
