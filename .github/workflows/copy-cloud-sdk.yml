@@ -24,9 +24,18 @@ jobs:
           sudo curl -# -fSL https://github.com/dyrnq/skopeo-binary/releases/download/${SKOPEO_VER}/skopeo.tar.xz | sudo tar -xvJ -C /usr/bin
           sudo chmod +x /usr/bin/skopeo
           skopeo -v && skopeo --help
-          mapfile -t all_tags < <(skopeo list-tags docker://gcr.io/google.com/cloudsdktool/cloud-sdk | jq -r '.Tags[]' | grep -v ^sha256-)
-          n=${#all_tags[@]}
-          echo "total etcd tags: $n"
+          all_tags_ver=$(skopeo list-tags docker://gcr.io/google.com/cloudsdktool/cloud-sdk | jq -r '.Tags[]' | grep -P '^\d+\.\d+\.\d+')
+          all_tags_named="alpine slim stable latest debian_component emulators"
+          all_tags_final=()
+          for tag in $all_tags_ver; do
+            major=$(echo "$tag" | cut -d. -f1)
+            if [ "$major" -ge 500 ] 2>/dev/null; then
+              all_tags_final+=("$tag")
+            fi
+          done
+          all_tags_final+=($all_tags_named)
+          n=${#all_tags_final[@]}
+          echo "count $n"
           weekday=$(date +"%u")
           page_size=256
           offset=$(( (weekday - 1) * page_size ))
@@ -34,7 +43,7 @@ jobs:
             echo "offset $offset >= $n, reset to 0"
             offset=0
           fi
-          tags=("${all_tags[@]:$offset:$page_size}")
+          tags=("${all_tags_final[@]:$offset:$page_size}")
           echo "page $(date +%u): offset=$offset, count=${#tags[@]}"
           json="{\"tags\":["
           for tag in "${tags[@]}"; do
