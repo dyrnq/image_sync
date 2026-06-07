@@ -67,7 +67,7 @@ jobs:
 
           for tag in $(skopeo list-tags docker://"${scr}" | jq -r '.Tags[]' | grep -v "sha" ) ; do
             #   skopeo --insecure-policy copy --all --retry-times 20 --dest-precompute-digests --dest-creds $DOCKER_USERNAME:$DOCKER_PASSWORD docker://"${scr}":"${tag}" docker://"${dest}":"${tag}"
-            schemaVersion=$(regctl manifest get docker://"${scr}":"${tag}" --format raw-body 2>/dev/null | jq -r '.schemaVersion')
+            schemaVersion=$(regctl manifest get "${scr}":"${tag}" --format raw-body 2>/dev/null | jq -r '.schemaVersion')
             if [ "${schemaVersion}" = "1" ]; then
                 echo "schemaVersion=1, skip copy"
             else

@@ -106,7 +106,7 @@ jobs:
           tag=${{ matrix.tags }}
           echo ${tag}
 
-          schemaVersion=$(regctl manifest get docker://"${scr}":"${tag}" --format raw-body 2>/dev/null | jq -r '.schemaVersion')
+          schemaVersion=$(regctl manifest get "${scr}":"${tag}" --format raw-body 2>/dev/null | jq -r '.schemaVersion')
           if [ "${schemaVersion}" = "1" ]; then
             echo "schemaVersion=1, skip copy"
           else
