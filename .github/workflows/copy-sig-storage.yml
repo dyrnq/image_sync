@@ -94,7 +94,8 @@ jobs:
           set -x;
           img=${{ matrix.images }}
           src="registry.k8s.io/${img}"
-          dest="docker.io/dyrnq/${img}"
+          dest_name=$(echo "${img}" | sed 's|.*/||')
+          dest="docker.io/dyrnq/${dest_name}"
 
           for tag in $(skopeo list-tags docker://"${src}" | jq -r '.Tags[]' | grep -P '^(latest|v.*)' | grep -v ^sha256-); do
             echo "${tag}"
