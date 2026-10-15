@@ -498,6 +498,11 @@ v0.2.3
 v0.2.2-ollama
 v0.2.2-cuda
 v0.2.2
+v0.12.2-slim
+v0.12.2-ollama
+v0.12.2-cuda126
+v0.12.2-cuda
+v0.12.2
 v0.12.1-slim
 v0.12.1-ollama
 v0.12.1-cuda126
@@ -1146,6 +1151,11 @@ cache-cuda-linux-amd64-dev
 0.2-ollama
 0.2-cuda
 0.2
+0.12.2-slim
+0.12.2-ollama
+0.12.2-cuda126
+0.12.2-cuda
+0.12.2
 0.12.1-slim
 0.12.1-ollama
 0.12.1-cuda126
